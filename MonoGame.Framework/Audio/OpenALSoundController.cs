@@ -86,7 +86,21 @@ namespace Microsoft.Xna.Framework.Audio
         private bool OpenSoundController()
         {
 #if MONOMAC || IOS
-			alcMacOSXMixerOutputRate(PREFERRED_MIX_RATE);
+			// Issue #4076 - alcMacOSXMixerOutputRate issue on iOS9
+			// https://github.com/mono/MonoGame/issues/4076
+			//
+			// Call to alcMacOSXMixerOutputRate commented out to prevent
+			// crash on iOS 9 devices.
+			//
+			// Diagnostics shows that call to alcMacOSXMixerOutputRate yields
+			// runtime exception:
+			// System.EntryPointNotFoundException: alcMacOSXMixerOutputRate
+			//
+			// Note: given that commenting out this line does not appear to
+			// adversely affect music/sound on iOS 8 or iOS 9 I'm leaving the
+			// change "as is".
+
+			//alcMacOSXMixerOutputRate(PREFERRED_MIX_RATE);
 #endif
             try
             {
